@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <joint name="livox_base_mount_joint" type="fixed">
+        <origin rpy="0 0 0" xyz="0.2 0 0.08"/>
+        <parent link="base_link"/>
+        <child link="livox_base_link"/>
+    </joint>
+
+    <link name="livox_base_link">
+        <inertial>
+            <mass value="0.265"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+        </inertial>
+        <visual>
+            <geometry>
+                <cylinder length="0.12" radius="0.045"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.12" radius="0.045"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="livox_base_scan_joint" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <parent link="livox_base_link"/>
+        <child link="livox"/>
+    </joint>
+
+    <link name="livox">
+        <inertial>
+            <mass value="0.01"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="livox">
+        <sensor name="livox_mid360" type="ray">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>640</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-3.141592653589793</min_angle>
+                        <max_angle>3.141592653589793</max_angle>
+                    </horizontal>
+                    <vertical>
+                        <samples>32</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-0.52</min_angle>
+                        <max_angle>0.52</max_angle>
+                    </vertical>
+                </scan>
+                <range>
+                    <min>0.1</min>
+                    <max>70.0</max>
+                    <resolution>0.001</resolution>
+                </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
+            </ray>
+            <plugin filename="libgazebo_ros_ray_sensor.so" name="gazebo_ros_livox_controller">
+                <ros>
+                    <namespace>/</namespace>
+                    <remapping>~/out:=livox_points</remapping>
+                </ros>
+                <frame_name>livox</frame_name>
+                <output_type>sensor_msgs/PointCloud2</output_type>
+            </plugin>
+        </sensor>
+    </gazebo>
+</robot>

@@ -96,13 +96,13 @@ https://github.com/user-attachments/assets/bcfeec70-12c5-49b8-b7a7-da4fa9b6dea5
 
 ### 2.4 Go2 Velodyne Config Gazebo demo: Run the Gazebo environment
 ```bash
-ros2 launch go2_config gazebo_velodyne.launch.py 
+ros2 launch go2_config gazebo_livox.launch.py 
 ```
 ![Go2 Velodyne Gazebo Launch](.docs/gazebo_velodyne_launch.png)
 
 ### 2.5 Go2 Veldyne Config Walking/PointCloud demo in RVIZ: Run the gazebo along with rviz
 ```bash
-ros2 launch go2_config gazebo_velodyne.launch.py rviz:=true
+ros2 launch go2_config gazebo_livox.launch.py rviz:=true
 ```
 
 > Note: set point cloud topic to `/velodyne_points`
@@ -114,12 +114,12 @@ ros2 launch go2_config gazebo_velodyne.launch.py rviz:=true
 > NOTE: To use Laser instead of 3D Velodyne LiDAR, comment `<xacro:include filename="$(find go2_description)/xacro/velodyne.xacro"/>` and uncomment `<xacro:include filename="$(find go2_description)/xacro/laser.xacro"/>` in `robot_VLP.xacro` file located inside `robots/description/go2_description/xacro/` folder.
 
 ```bash
-ros2 launch go2_config gazebo_velodyne.launch.py 
+ros2 launch go2_config gazebo_livox.launch.py 
 ```
 
 To Run the gazebo along with rviz
 ```bash
-ros2 launch go2_config gazebo_velodyne.launch.py rviz:=true
+ros2 launch go2_config gazebo_livox.launch.py rviz:=true
 ```
 
 ## 3. Tuning gait parameters
