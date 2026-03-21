@@ -56,3 +56,4 @@ third_party/rtabmap-0.23.4/.dockerignore
 vendor/rtabmap_stack/rtabmap-0.23.4/install/
 vendor/rtabmap_stack/rtabmap-0.23.4/build/
 vendor/rtabmap_stack/rtabmap-0.23.4/build_local/
+cloud_map
