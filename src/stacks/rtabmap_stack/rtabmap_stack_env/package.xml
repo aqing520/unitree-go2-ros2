@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>rtabmap_stack_env</name>
+  <version>0.1.0</version>
+  <description>Environment hook package for the prebuilt RTAB-Map 0.23.4 dependency.</description>
+
+  <maintainer email="anujjain.dev@gmail.com">Anuj Jain</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

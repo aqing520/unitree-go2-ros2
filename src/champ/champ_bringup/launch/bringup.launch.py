@@ -3,18 +3,14 @@ import xacro
 import launch_ros
 import xml.etree.ElementTree as ET
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.actions import Node
-
+from launch_ros.actions import LifecycleNode, Node
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     ExecuteProcess,
     IncludeLaunchDescription,
-    GroupAction,
-    RegisterEventHandler
+    TimerAction,
 )
-from launch.event_handlers.on_process_exit import OnProcessExit
-from launch.event_handlers.on_execution_complete import OnExecutionComplete
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration
@@ -187,10 +183,11 @@ def generate_launch_description():
         ],
     )
 
-    base_to_footprint_ekf = Node(
+    base_to_footprint_ekf = LifecycleNode(
         package="robot_localization",
         executable="ekf_node",
         name="base_to_footprint_ekf",
+        namespace="",
         output="screen",
         parameters=[
             {"base_link_frame": LaunchConfiguration("base_link_frame")},
@@ -205,10 +202,11 @@ def generate_launch_description():
         remappings=[("odometry/filtered", "odom/local")],
     )
 
-    footprint_to_odom_ekf = Node(
+    footprint_to_odom_ekf = LifecycleNode(
         package="robot_localization",
         executable="ekf_node",
         name="footprint_to_odom_ekf",
+        namespace="",
         output="screen",
         parameters=[
             {"base_link_frame": LaunchConfiguration("base_link_frame")},
@@ -221,6 +219,46 @@ def generate_launch_description():
             ),
         ],
         remappings=[("odometry/filtered", "odom")],
+    )
+
+    configure_base_to_footprint_ekf = TimerAction(
+        period=2.0,
+        actions=[
+            ExecuteProcess(
+                cmd=["ros2", "lifecycle", "set", "/base_to_footprint_ekf", "configure"],
+                output="screen",
+            )
+        ],
+    )
+
+    activate_base_to_footprint_ekf = TimerAction(
+        period=4.0,
+        actions=[
+            ExecuteProcess(
+                cmd=["ros2", "lifecycle", "set", "/base_to_footprint_ekf", "activate"],
+                output="screen",
+            )
+        ],
+    )
+
+    configure_footprint_to_odom_ekf = TimerAction(
+        period=2.5,
+        actions=[
+            ExecuteProcess(
+                cmd=["ros2", "lifecycle", "set", "/footprint_to_odom_ekf", "configure"],
+                output="screen",
+            )
+        ],
+    )
+
+    activate_footprint_to_odom_ekf = TimerAction(
+        period=4.5,
+        actions=[
+            ExecuteProcess(
+                cmd=["ros2", "lifecycle", "set", "/footprint_to_odom_ekf", "activate"],
+                output="screen",
+            )
+        ],
     )
 
     rviz2 = Node(
@@ -260,6 +298,10 @@ def generate_launch_description():
             state_estimator_node,
             base_to_footprint_ekf,
             footprint_to_odom_ekf,
+            configure_base_to_footprint_ekf,
+            activate_base_to_footprint_ekf,
+            configure_footprint_to_odom_ekf,
+            activate_footprint_to_odom_ekf,
             rviz2
         ]
     )

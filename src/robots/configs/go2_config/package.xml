@@ -11,6 +11,15 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <build_depend>launch_ros</build_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>champ_bringup</exec_depend>
+  <exec_depend>champ_gazebo</exec_depend>
+  <exec_depend>champ_navigation</exec_depend>
+  <exec_depend>go2_description</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>rtabmap_launch</exec_depend>
+  <exec_depend>rtabmap_stack_env</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

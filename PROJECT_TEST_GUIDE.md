@@ -34,6 +34,15 @@ cd /home/wzy/ROS2/unitree-go2-ros2
 source install/setup.bash
 ```
 
+如果需要使用 RTAB-Map 后端，先用新的外层工作区构建入口：
+```bash
+cd /home/wzy/ROS2/unitree-go2-ros2
+bash scripts/build_workspace_with_rtabmap.sh --packages-up-to go2_config
+source install/setup.bash
+```
+- 这个入口会复用 `vendor/rtabmap_stack/rtabmap-0.23.4/install`
+- 不会重新进入 RTAB-Map 0.23.4 核心 C++ 源码编译
+
 ### 1. **Gazebo 仿真演示** (基础版本)
 ```bash
 ros2 launch go2_config gazebo.launch.py
@@ -250,7 +259,7 @@ echo $ROS_PACKAGE_PATH
 ### 问题3: 软件包不存在
 **解决**: 重新构建
 ```bash
-colcon build --symlink-install
+bash scripts/build_workspace_with_rtabmap.sh --packages-up-to go2_config
 source install/setup.bash
 ```
 
@@ -275,9 +284,17 @@ unitree-go2-ros2/
 │   │   ├── champ_msgs/                 # ROS消息
 │   │   └── champ_navigation/           # 导航配置
 │   ├── champ_teleop/                   # 遥操控制
-│   └── robots/                         # Go2机器人配置
-│       ├── configs/go2_config/         # 机器人配置
-│       └── descriptions/go2_description/ # 机器人描述
+│   ├── robots/                         # Go2机器人配置
+│   │   ├── configs/go2_config/         # 机器人配置
+│   │   └── descriptions/go2_description/ # 机器人描述
+│   └── stacks/rtabmap_stack/           # RTAB-Map ROS集成分组目录
+│       ├── rtabmap_ros/                # rtabmap_* / rtsp_camera_bridge
+│       ├── robot_localization/         # 状态估计
+│       └── rtabmap_stack_env/          # 预编译RTAB-Map环境钩子
+├── vendor/
+│   └── rtabmap_stack/rtabmap-0.23.4/   # 预编译RTAB-Map核心依赖
+├── archive/
+│   └── rtabmap_nav2_stack_legacy/      # 历史迁移资料和 demo bag 归档
 ├── install/                            # 安装目录
 └── build/                              # 构建目录
 ```
